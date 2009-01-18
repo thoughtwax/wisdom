@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>wisdom</title>
+
+  <style type="text/css" media="screen">
+    body {
+      background-color: #efefe9;
+      color: #362809;
+      overflow: hidden;
+    }
+    #status {
+      margin: 15%;
+      font-size: 2.5em;
+      font-style: italic;
+    }
+    #status span {
+      color: #666;
+      display: block;
+      margin-top: .8em;
+      text-align: right;
+      padding-right: 20%;
+      font-size: .4em;
+      font-style: normal;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div id="status"></div>
+
+<script type="text/javascript">
+  var href = window.location.href;
+  var queryString = '';
+  if (href.indexOf('?') != -1) {
+    // Grab the usernames to display from the querystring (comma seperated).
+    queryString = href.substr(href.indexOf('?') + 1).toLowerCase();
+  }
+  var usernames = queryString.split(',');
+  if (usernames[0] == '') {
+    // Some defaults to show if no names are provided.
+    usernames = ['buckyfuller', 'marshallmcluhan', 'presencemachine', 'jennyholzer'];
+  }
+
+  var username = usernames[Math.floor(Math.random() * usernames.length)];
+  var url = 'http://search.twitter.com/search.json?callback=show&q=from%3A' + username;
+
+  // Add the URL as a script element to the document head.
+  var head = document.getElementsByTagName('head');
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = url;
+  head[0].appendChild(script);
+
+  function show(data) {
+    // Choose a random quote from the list returned.
+    var datum = data.results[Math.floor(Math.random() * data.results.length)];
+
+    if (datum) {
+      var message = datum.text;
+      var author = datum.from_user;
+    } else {
+      var message = 'Drink to me.';
+      var author = 'picasso';
+    }
+
+    // Create DOM elements to display the results.
+    var container = document.getElementById("status");
+    var span = document.createElement('span');
+    span.appendChild(document.createTextNode(' - ' + author));
+
+    // Attach the holder element.
+    container.appendChild(document.createTextNode(message));
+    container.appendChild(span);
+  }
+
+</script>
+
+</body>
+</html>
